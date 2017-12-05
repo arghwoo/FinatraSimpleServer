@@ -4,21 +4,25 @@ import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
 
 class BookResController extends Controller{
-  get("/book") { request: Request =>
+  val uriPattern : String = "/books/:book_id"
+  val resEndpoint : String = "bookId"
+
+  get(uriPattern) { request: Request =>
     info("hi")
-    "Book is " + request.params.getOrElse("book", "unnamed") + ", method is get"
+    val userName:String = request.uri
+    "Hello " + request.params("bookId") + ", method is " + request.method.name
   }
 
-  put("/book") { request: Request =>
+  put(uriPattern){ request: BookRequest =>
+    "BookId in uri is " + request.bookId + ", bookId in body is " + request.id + ", book name is " + request.name
+  }
+
+  post(uriPattern) { request: BookRequest =>
+    "BookId in uri is " + request.bookId + ", bookId in body is " + request.id + ", book name is " + request.name
+  }
+
+  delete(uriPattern) { request: Request =>
     info("hi")
-    "Book is " + request.params.getOrElse("book", "unnamed") + ",  method is put"
-  }
-
-  post("/book") { request: Request =>
-    "Book is " + request.params.getOrElse("book", "unnamed") + ", method is post"
-  }
-
-  delete("/book") { request: Request=>
-    "Try to delete book" + request.params.getOrElse("book", "unamed") + ", method is delete"
+    "Hello " + request.params("id") + ", method is " + request.method.name
   }
 }
