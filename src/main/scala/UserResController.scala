@@ -5,24 +5,24 @@ import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
 
 class UserResController extends Controller {
-
-  get("/user") { request: Request =>
+  val uriPattern : String = "/users/:id"
+  get(uriPattern) { request: Request =>
     info("hi")
-    "Hello " + request.params.getOrElse("name", "unnamed") + "Method is get"
+    val userName:String = request.uri
+    "Hello " + request.params("id") + ", method is " + request.method.name
   }
 
-  put("/user") { request: Request =>
+  put(uriPattern) { request: UserResRequest =>
     info("hi")
-    "Hello " + request.params.getOrElse("name", "unamed") + "Method is Put"
-
+    "Hello " + request.first_name + " " + request.last_name + ", age is " + request.age + ", city is " + request.city
   }
 
-  post("/user") { hiRequest: HiRequest =>
-    "Hello " + hiRequest.name + " with id " + hiRequest.id + "Method is post"
+  post(uriPattern) { request: UserResRequest =>
+    "Hello " + request.first_name + " " + request.last_name + ", age is " + request.age + ", city is " + request.city
   }
 
-  delete("/user") { request: Request =>
+  delete(uriPattern) { request: Request =>
     info("hi")
-    "Hello " + request.params.getOrElse("name", "unamed") + " method is delete"
+    "Hello " + request.params("id") + ", method is " + request.method.name
   }
 }
