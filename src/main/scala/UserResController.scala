@@ -3,25 +3,31 @@ package io.arghwoo.simpleapiserver
 
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
+import org.mongodb.scala.Document
 
 class UserResController extends Controller {
-  val uriPattern : String = "/users/:id"
-  get(uriPattern) { request: Request =>
+  val uriUserEp : String = "/users/:id"
+  val uriUserApi : String = "/users"
+  get(uriUserEp) { request: Request =>
     info("hi")
     val userName:String = request.uri
     "Hello " + request.params("id") + ", method is " + request.method.name
   }
 
-  put(uriPattern) { request: UserResRequest =>
+  put(uriUserEp) { request: UserResPutRequest =>
     info("hi")
-    "Hello " + request.first_name + " " + request.last_name + ", age is " + request.age + ", city is " + request.city
+    val doc: Document = Document("user_id" -> request.id, "first_name" -> request.first_name,
+      "last_name" -> request.last_name, "age" -> request.age, "city" -> request.city)
+    request.id + " OK"
   }
 
-  post(uriPattern) { request: UserResRequest =>
-    "Hello " + request.first_name + " " + request.last_name + ", age is " + request.age + ", city is " + request.city
+  post(uriUserApi) { request: UserResPostRequest =>
+    val doc: Document = Document("user_id" -> request.user_id, "first_name" -> request.first_name,
+      "last_name" -> request.last_name, "age" -> request.age, "city" -> request.city)
+    request.user_id + " OK"
   }
 
-  delete(uriPattern) { request: Request =>
+  delete(uriUserEp) { request: Request =>
     info("hi")
     "Hello " + request.params("id") + ", method is " + request.method.name
   }
