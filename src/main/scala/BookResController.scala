@@ -2,32 +2,32 @@ package io.arghwoo.simpleapiserver
 
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
-import org.mongodb.scala.Document
 
 class BookResController extends Controller{
-  val uriPattern : String = "/books/:isbn"
-  val resEndpoint : String = "bookId"
+  val uriBookEp : String = "/books/:isbn"
+  val uriBookApi : String = "/books"
+  val mongodbManager = MongoDBManager()
 
-  get(uriPattern) { request: Request =>
+  get(uriBookEp) { request: Request =>
     info("hi")
     val userName:String = request.uri
     "Hello " + request.params("isbn") + ", method is " + request.method.name
   }
 
-  put(uriPattern){ request: BookResPutRequest =>
-    val doc: Document = Document("isbn" -> request.isbn, "name" -> request.name,
-      "category" -> request.category)
+  put(uriBookEp){ request: BookResPutRequest =>
+    //val doc: Document = Document("isbn" -> request.isbn, "name" -> request.name,
+     // "category" -> request.category)
     "OK"
   }
 
-  post(uriPattern) { request: BookResPostRequest =>
-    val doc: Document = Document("isbn" -> request.isbn, "name" -> request.name,
-      "category" -> request.category)
+  post(uriBookApi) { request: BookResPostRequest =>
+    mongodbManager.booksInsertDoc(request)
     "OK"
   }
 
-  delete(uriPattern) { request: Request =>
+  delete(uriBookEp) { request: Request =>
     info("hi")
+    mongodbManager.booksDeleteDoc(request.params("isbn"))
     "Hello " + request.params("isbn") + ", method is " + request.method.name
   }
 }
