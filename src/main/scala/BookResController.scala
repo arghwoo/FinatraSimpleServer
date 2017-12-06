@@ -9,25 +9,22 @@ class BookResController extends Controller{
   val mongodbManager = MongoDBManager()
 
   get(uriBookEp) { request: Request =>
-    info("hi")
-    val userName:String = request.uri
-    "Hello " + request.params("isbn") + ", method is " + request.method.name
+    "{\"result\" : " + mongodbManager.bookQueryDoc(request.params("isbn")) + "}"
   }
 
   put(uriBookEp){ request: BookResPutRequest =>
-    //val doc: Document = Document("isbn" -> request.isbn, "name" -> request.name,
-     // "category" -> request.category)
-    "OK"
+    mongodbManager.bookUpdateDoc(request)
+    "{\"result\" : \"done\"}"
   }
 
   post(uriBookApi) { request: BookResPostRequest =>
     mongodbManager.booksInsertDoc(request)
-    "OK"
+    "{\"result\" : \"done\"}"
   }
 
   delete(uriBookEp) { request: Request =>
     info("hi")
     mongodbManager.booksDeleteDoc(request.params("isbn"))
-    "Hello " + request.params("isbn") + ", method is " + request.method.name
+    "{\"result\" : \"done\"}"
   }
 }
