@@ -19,18 +19,26 @@ class BookResController extends Controller{
   }
 
   put(uriBookEp){ request: BookResPutRequest =>
-    mongodbManager.bookUpdateDoc(request)
-    "{\"result\" : \"done\"}"
+    if (mongodbManager.bookUpdateDoc(request)) {
+      "{\"result\" : \"done\"}"
+    } else {
+      "{\"result\" : \"failed\"}"
+    }
   }
 
   post(uriBookApi) { request: BookResPostRequest =>
-    mongodbManager.booksInsertDoc(request)
-    "{\"result\" : \"done\"}"
+    if (mongodbManager.booksInsertDoc(request)) {
+      "{\"result\" : \"done\"}"
+    } else {
+      "{\"result\" : \"failed\"}"
+    }
   }
 
   delete(uriBookEp) { request: Request =>
-    info("hi")
-    mongodbManager.booksDeleteDoc(request.params("isbn"))
-    "{\"result\" : \"done\"}"
+    if (mongodbManager.booksDeleteDoc(request.params("isbn"))) {
+      "{\"result\" : \"done\"}"
+    } else {
+      "{\"result\" : \"failed\"}"
+    }
   }
 }

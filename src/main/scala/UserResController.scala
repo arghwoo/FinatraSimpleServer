@@ -19,17 +19,26 @@ class UserResController extends Controller {
   }
 
   put(uriUserEp) { request: UserResPutRequest =>
-    mongodbManager.usersUpdateDoc(request)
-    "{\"result\" : \"done\"}"
+    if (mongodbManager.usersUpdateDoc(request)) {
+      "{\"result\" : \"done\"}"
+    } else {
+      "{\"result\" : \"failed\"}"
+    }
   }
 
   post(uriUserApi) { request: UserResPostRequest =>
-    mongodbManager.usersInsertDoc(request)
-    "{\"result\" : \"done\"}"
+    if (mongodbManager.usersInsertDoc(request)) {
+      "{\"result\" : \"done\"}"
+    } else {
+      "{\"result\" : \"failed\"}"
+    }
   }
 
   delete(uriUserEp) { request: Request =>
-    mongodbManager.usersDeleteDoc(request.params("id"))
-    "{\"result\" : \"done\"}"
+    if (mongodbManager.usersDeleteDoc(request.params("id"))) {
+      "{\"result\" : \"done\"}"
+    } else {
+      "{\"result\" : \"faled\"}"
+    }
   }
 }
