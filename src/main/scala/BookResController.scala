@@ -9,7 +9,13 @@ class BookResController extends Controller{
   val mongodbManager = MongoDBManager()
 
   get(uriBookEp) { request: Request =>
-    "{\"result\" : " + mongodbManager.bookQueryDoc(request.params("isbn")) + "}"
+    val result: String = mongodbManager.bookQueryDoc(request.params("isbn"))
+    if (result.isEmpty()) {
+      "{\"result\" : \"none\"}"
+    }
+    else {
+      "{\"result\" : " + result + "}"
+    }
   }
 
   put(uriBookEp){ request: BookResPutRequest =>

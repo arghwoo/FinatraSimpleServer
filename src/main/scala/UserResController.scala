@@ -9,8 +9,13 @@ class UserResController extends Controller {
   val mongodbManager = MongoDBManager()
 
   get(uriUserEp) { request: Request =>
-    val userName:String = request.uri
-    "{\"result\" : " + mongodbManager.userQueryDoc(request.params("id")) + "}"
+    val result: String = mongodbManager.userQueryDoc(request.params("id"))
+    if (result.isEmpty()) {
+      "{\"result\" : \"none\"}"
+    }
+    else {
+      "{\"result\" : " + result + "}"
+    }
   }
 
   put(uriUserEp) { request: UserResPutRequest =>
